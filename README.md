@@ -1,2 +1,2 @@
 # PyMarkable
-Python library for making GUI applications on the ReMarkable tablet using "simple". 
+Python library for making GUI applications on the ReMarkable tablet wrapped around the "simple" application

@@ -4,7 +4,6 @@ import subprocess
 import os
 import copy
 
-
 from dataclasses import dataclass, asdict
 from collections.abc import Iterable
 from typing import Optional
@@ -70,13 +69,13 @@ class ReMarkable:
                     compiled_widget.height,
                 ) = self.caculate_width_height(widget)
 
-            if "%" in widget.x:
+            if "%" in str(widget.x):
                 starting_point = (
                     float(widget.x.strip("%")) / 100 * 1380
                 ) 
                 compiled_widget.x = starting_point - compiled_widget.width / 2
 
-            if "%" in widget.y:
+            if "%" in str(widget.y):
                 starting_point = (
                     float(widget.y.strip("%")) / 100 * 1820
                 ) 
@@ -115,15 +114,24 @@ class ReMarkable:
                     self.screen.remove(widget)
 
     def caculate_width_height(self, widget: Widget) -> tuple[int, int]:
-        width = (self.fontsize / 1.7) * len(widget.value)
-        height = self.fontsize * 1.3125
+        if widget.typ == "image":
+            info = subprocess.check_output(['file', widget.value]).decode().replace(',', ' ')
+            width, height = [int(char) for char in info.split() if char.isdigit()]
+
+        else:
+            width = (self.fontsize / 1.7) * len(widget.value)
+            height = self.fontsize * 1.3125
 
         return width, height
 
-
 rm = ReMarkable(2)
 w1 = Widget(id="button1", typ="button", value="Click me!", x="50%", y="50%")
-rm.add(w1)
+w2 = Widget(id="button1", typ="paragraph", value=out, x=60, y="10%")
+
+rm.add_multiple([w1, w2])
 rm.display()
 
-# Todo: Make adjustment sizes for images too
+'''
+Make the images appear
+Paragraph % length
+'''

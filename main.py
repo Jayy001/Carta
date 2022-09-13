@@ -126,7 +126,7 @@ class ReMarkable:
 
 rm = ReMarkable(2)
 w1 = Widget(id="button1", typ="button", value="Click me!", x="50%", y="50%")
-w2 = Widget(id="button1", typ="paragraph", value=out, x=60, y="10%")
+w2 = Widget(id="button1", typ="image", value="me.png", x="40%", y="10%")
 
 rm.add_multiple([w1, w2])
 rm.display()

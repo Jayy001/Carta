@@ -38,14 +38,17 @@ class Widget:
         if self.typ == "image":
             if not os.path.exists(self.value):
                 raise OSError(f"Image path ({self.value}) does not exist")
-        self.id.replace(" ", "_")
+
+        self.id = "_".join(self.id.split())
 
 
 class ReMarkable:
     def __init__(self) -> None:
         self.command = ["/opt/bin/simple"]
 
-        if "reMarkable 2.0" in str(subprocess.check_output(['cat', '/sys/devices/soc0/machine'])):
+        if "reMarkable 2.0" in str(
+            subprocess.check_output(["cat", "/sys/devices/soc0/machine"])
+        ):
             self.command.insert(0, "rm2fb-client")
 
         self.reset()  # Don't make this a function?
@@ -70,15 +73,11 @@ class ReMarkable:
                 ) = self.calculate_width_height(widget)
 
             if "%" in str(widget.x):
-                starting_point = (
-                        float(widget.x.strip("%")) / 100 * 1380
-                )
+                starting_point = float(widget.x.strip("%")) / 100 * 1380
                 compiled_widget.x = starting_point - compiled_widget.width / 2
 
             if "%" in str(widget.y):
-                starting_point = (
-                        float(widget.y.strip("%")) / 100 * 1820
-                )
+                starting_point = float(widget.y.strip("%")) / 100 * 1820
                 compiled_widget.y = starting_point - compiled_widget.height / 2
 
             layout.append(compiled_widget.convert())
@@ -100,14 +99,12 @@ class ReMarkable:
         """
         for widget in args:
             if widget.id in [screen_widget.id for screen_widget in self.screen]:
-                raise ValueError(
-                    f"Widget with id {widget.id} already exists"
-                )
+                raise ValueError(f"Widget with id {widget.id} already exists")
             self.screen.append(widget)
 
     @staticmethod
     def eclear():
-        os.system('rm2fb-client /opt/bin/eclear')
+        os.system("rm2fb-client /opt/bin/eclear")
 
     def reset(self) -> None:
         self.screen = []
@@ -125,7 +122,11 @@ class ReMarkable:
 
     def calculate_width_height(self, widget: Widget) -> tuple[int, int]:
         if widget.typ == "image":
-            info = subprocess.check_output(['file', widget.value]).decode().replace(',', ' ')
+            info = (
+                subprocess.check_output(["file", widget.value])
+                .decode()
+                .replace(",", " ")
+            )
             width, height = [int(char) for char in info.split() if char.isdigit()]
 
         else:
@@ -134,7 +135,8 @@ class ReMarkable:
 
         return width, height
 
-'''
+
+"""
 Make the images appear
 Paragraph % length
-'''
+"""

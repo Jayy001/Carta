@@ -38,6 +38,7 @@ class Widget:
         if self.typ == "image":
             if not os.path.exists(self.value):
                 raise OSError(f"Image path ({self.value}) does not exist")
+        self.id.replace(" ", "_")
 
 
 class ReMarkable:

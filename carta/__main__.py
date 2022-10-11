@@ -5,7 +5,6 @@ import os
 import copy
 
 from dataclasses import dataclass
-from collections.abc import Iterable
 from typing import Optional
 
 

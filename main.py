@@ -4,7 +4,7 @@ import subprocess
 import os
 import copy
 
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass
 from collections.abc import Iterable
 from typing import Optional
 
@@ -42,16 +42,16 @@ class Widget:
 
 
 class ReMarkable:
-    def __init__(self, version: int) -> None:
+    def __init__(self) -> None:
         self.command = ["/opt/bin/simple"]
 
-        if version == 2:
+        if "reMarkable 2.0" in str(subprocess.check_output(['cat', '/sys/devices/soc0/machine'])):
             self.command.insert(0, "rm2fb-client")
 
-        self.reset()
+        self.reset()  # Don't make this a function?
 
-    def display(self) -> str:
-        if self.screen == None:
+    def display(self) -> bytes | dict:
+        if not self.screen:
             return {}
 
         script = f"@fontsize {self.fontsize}\n"
@@ -63,22 +63,22 @@ class ReMarkable:
         for widget in self.screen:
             compiled_widget = copy.copy(widget)
 
-            if set((widget.width, widget.height)) == {None}:
+            if {widget.width, widget.height} == {None}:
                 (
                     compiled_widget.width,
                     compiled_widget.height,
-                ) = self.caculate_width_height(widget)
+                ) = self.calculate_width_height(widget)
 
             if "%" in str(widget.x):
                 starting_point = (
-                    float(widget.x.strip("%")) / 100 * 1380
-                ) 
+                        float(widget.x.strip("%")) / 100 * 1380
+                )
                 compiled_widget.x = starting_point - compiled_widget.width / 2
 
             if "%" in str(widget.y):
                 starting_point = (
-                    float(widget.y.strip("%")) / 100 * 1820
-                ) 
+                        float(widget.y.strip("%")) / 100 * 1820
+                )
                 compiled_widget.y = starting_point - compiled_widget.height / 2
 
             layout.append(compiled_widget.convert())
@@ -92,17 +92,27 @@ class ReMarkable:
 
         return stdout
 
+    def add(self, *args) -> None:
+        """
+        `add` adds widgets to the screen
+
+        args:Iterable[Widget]
+        """
+        for widget in args:
+            if widget.id in [screen_widget.id for screen_widget in self.screen]:
+                raise ValueError(
+                    f"Widget with id {widget.id} already exists"
+                )
+            self.screen.append(widget)
+
+    @staticmethod
+    def eclear():
+        os.system('rm2fb-client /opt/bin/eclear')
+
     def reset(self) -> None:
         self.screen = []
         self.fontsize = 32
         self.timeout = None
-
-    def add_multiple(self, widgets: Iterable[Widget]) -> None:
-        for widget in widgets:
-            self.screen.append(widget)
-
-    def add(self, widget: Widget) -> None:
-        self.screen.append(widget)
 
     def remove(self, id: int = None, widget: Widget = None) -> None:
         if widget:
@@ -113,7 +123,7 @@ class ReMarkable:
                 if widget.id == id:
                     self.screen.remove(widget)
 
-    def caculate_width_height(self, widget: Widget) -> tuple[int, int]:
+    def calculate_width_height(self, widget: Widget) -> tuple[int, int]:
         if widget.typ == "image":
             info = subprocess.check_output(['file', widget.value]).decode().replace(',', ' ')
             width, height = [int(char) for char in info.split() if char.isdigit()]
@@ -123,13 +133,6 @@ class ReMarkable:
             height = self.fontsize * 1.3125
 
         return width, height
-
-rm = ReMarkable(2)
-w1 = Widget(id="button1", typ="button", value="Click me!", x="50%", y="50%")
-w2 = Widget(id="button1", typ="image", value="me.png", x="40%", y="10%")
-
-rm.add_multiple([w1, w2])
-rm.display()
 
 '''
 Make the images appear

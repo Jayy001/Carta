@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "carta"
-version = "0.1.5"
+version = "0.1.6"
 description = "Python library for making GUI applications on the ReMarkable tablet wrapped around the \"simple\" application"
 authors = ["JaySec"]
 license = "gpl-3.0"

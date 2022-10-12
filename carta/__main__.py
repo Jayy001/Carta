@@ -52,9 +52,11 @@ class Widget:
             if not all({self.low, self.high}):
                 raise LookupError("You have specified a slider type but have not provided a high and low values")
 
+            '''
             int_check = int(self.value.__index__())
             if int_check < 1:
                 raise ValueError('Expected positive integer for value')
+            '''
 
         if type(self.value) is not str:
             self.value = str(self.value)

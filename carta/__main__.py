@@ -68,7 +68,7 @@ class ReMarkable:
         self.command = ["/opt/bin/simple"]
 
         if "reMarkable 2.0" in str(
-            subprocess.check_output(["cat", "/sys/devices/soc0/machine"])
+                subprocess.check_output(["cat", "/sys/devices/soc0/machine"])
         ):
             self.command.insert(0, "rm2fb-client")
 
@@ -110,11 +110,22 @@ class ReMarkable:
         )
         stdout, stderr = event.communicate(script.encode())
 
-        return stdout
+        out = {}
 
-    def parse_out(self, stdout):
         if stdout:
-            pass
+            stdout = stdout.decode("utf-8").strip().split(": ")[1:]
+
+            if len(stdout) == 1:  # Button
+                out[stdout[0]] = True
+            else:
+                out[stdout[0]] = stdout[-1]  # Other
+
+        return out
+
+    def lookup(self, id: object) -> object:
+        for widget in self.screen:
+            if widget.id == id:
+                return widget
 
     def add(self, *args) -> None:
         """
@@ -155,7 +166,7 @@ class ReMarkable:
             width, height = [int(char) for char in info.split() if char.isdigit()]
 
         elif widget.typ == "range":
-            width = (widget.high - widget.low)*20
+            width = (widget.high - widget.low) * 20
             height = self.fontsize * 1.3125
 
         else:

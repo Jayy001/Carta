@@ -21,13 +21,22 @@ class Widget:
 
     justify: Optional[str] = None
 
+    low: Optional[int] = 1
+    high: Optional[int] = 10
+
+    @property
     def convert(self):
         layout = ""
 
         if self.justify:
             layout += f"@justify {self.justify}\n"
 
-        layout += f"{self.typ}:{self.id} {self.x} {self.y} {self.width} {self.height} {self.value}"
+        layout += f"{self.typ}:{self.id} {self.x} {self.y} {self.width} {self.height} "
+
+        if self.typ == "range":
+            layout += f"{self.low} {self.high} "
+
+        layout += self.value
 
         if "\n" in self.value:
             layout = "[" + layout + "]"
@@ -39,7 +48,19 @@ class Widget:
             if not os.path.exists(self.value):
                 raise OSError(f"Image path ({self.value}) does not exist")
 
+        if self.typ == "range":
+            if not all({self.low, self.high}):
+                raise LookupError("You have specified a slider type but have not provided a high and low values")
+
+            int_check = int(self.value.__index__())
+            if int_check < 1:
+                raise ValueError('Expected positive integer for value')
+
+        if type(self.value) is not str:
+            self.value = str(self.value)
+
         self.id = "_".join(self.id.split())
+        self.state = None
 
 
 class ReMarkable:
@@ -80,7 +101,7 @@ class ReMarkable:
                 starting_point = float(widget.y.strip("%")) / 100 * 1820
                 compiled_widget.y = starting_point - compiled_widget.height / 2
 
-            layout.append(compiled_widget.convert())
+            layout.append(compiled_widget.convert)
 
         script += "\n".join(layout)
 
@@ -90,6 +111,10 @@ class ReMarkable:
         stdout, stderr = event.communicate(script.encode())
 
         return stdout
+
+    def parse_out(self, stdout):
+        if stdout:
+            pass
 
     def add(self, *args) -> None:
         """
@@ -128,6 +153,10 @@ class ReMarkable:
                 .replace(",", " ")
             )
             width, height = [int(char) for char in info.split() if char.isdigit()]
+
+        elif widget.typ == "range":
+            width = (widget.high - widget.low)*20
+            height = self.fontsize * 1.3125
 
         else:
             width = (self.fontsize / 1.7) * len(widget.value)

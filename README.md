@@ -100,7 +100,7 @@ rm.remove("<id>")
 rm.remove(my_button)
 ```
 
-In case you want to fully clear the screen, you can use the `eclear()` function - however this does require the modified updated simple binary which okeh can provide for you! 
+In case you want to fully clear the screen, you can use the `eclear()` function - however this does require the modified updated simple binary which `okeh` can provide for you! 
 
 ```python
 rm.eclear()

@@ -1,18 +1,30 @@
 # Carta
-Python library for making GUI applications on the ReMarkable tablet wrapped around the "simple" application
+Python library for making GUI applications on the reMarkable tablet wrapped around the ["simple"](https://rmkit.dev/apps/sas) application
 
-# Using carta
-Cartas purpose is to function as a python wrapper around *sas* - the simple app script for making apps on the Remarkable without need to compiling code. It's written in python and is designed to be as user-friendly and easy to use as possible.
+# Using Carta
+Carta's purpose is to function as a Python wrapper around [*sas*](https://rmkit.dev/apps/sas) - the simple app script for making apps on the reMarkable without need to compiling code.
+It's written in python and is designed to be as user-friendly and easy to use as possible.
 
-To use, you'll need to install `simple` (rm2 users will also need `display`). This can be done by running `opkg install <name>` in a SSH session on the RM tablet. Next you'll need to install `pip` and also the actual library on the RM machine.
+To use it, you'll need to install a few things onto your reMarkable, in an SSH session:
+- [`toltec`](https://toltec-dev.org/) - an unofficial reMarkable-specific package manager
+  See instructions on toltec's website.
+- `simple`
+  `opkg install simple`
+- rM2 users need `display`
+  `opkg install display`
+- `pip` - the package manager for python
+  ```
+  wget https://bootstrap.pypa.io/get-pip.py
+  python get-pip.py
+  ```
+- `carta` - this library
+  `pip install carta`
 
-```
-wget https://bootstrap.pypa.io/get-pip.py
-python get-pip.py
-pip install carta
-```
+After having installed all the prerequisites, you are ready to start developing.
+Make a python script on the rM and run `chmod +x` on the script to make it executable.
+You'll also need to add a `shebang` to the script (`#!/opt/bin/python` at the top) so that it knows what to run it with.
 
-After having installed all the perquisites you are ready to start developing, make a python script on the RM and run `chmod +x` on the script to make it executable. You'll also need to add a `shebang` to the script (`#!/opt/bin/python` at the top) so that it knows what to run it with. Here's an example script that you can copy,
+Here's an example script that you can copy:
 
 ```python
 #!/opt/bin/python 
@@ -39,13 +51,15 @@ This imports the necessary "parts" for the library to function. The `ReMarkable`
 * TextInput
 * Text Area
 * Image
-Please refer to [the spec](https://rmkit.dev/apps/sas/spec) for more detailed information. 
+
+Please refer to [the `simple` spec](https://rmkit.dev/apps/sas/spec) for more detailed information. 
 
 ```python
 my_button = Widget(id="but1", type="button", value="Hello!", x="50%", y="50%")
 ```
 
-Here we are making a new `Widget` which we have assigned to `my_button`. The following is a table outlining information about supported arguments which can be given. 
+Here we are making a new `Widget` which we have assigned to `my_button`.
+The following is a table outlining information about supported arguments which can be given. 
 
 | Argument | Required                      | Use                                                               | Supported inputs                                                                          | Notes                                                                                                               |
 | -------- | ----------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
@@ -65,13 +79,14 @@ rm.add(my_button)
 rm.display()
 ```
 
-I've made the decision to have widgets be manually added like this to make it easier to manage when making apps). We can do this easily with `add(args*)`, where `args*` are any `Widget` types - For example,
+I've made the decision to have widgets be manually added like this to make it easier to manage when making apps).
+We can do this easily with `add(args*)`, where `args*` are any `Widget` types - For example,
 
 ```python
 rm.add(my_button, label1, logo)
 ```
 
-And then display it to the rm! The `display()` function will take all the currently active `Widgets` and convert them into something that simple can understand and render. The active widgets are all stored in the `screen` list (in this case `rm.screen`) and you can easily access and modify any of the widgets in there at any time via the `lookup` function which will return the `Widget` object that has the corresponding ID 
+And then display it to the rM! The `display()` function will take all the currently active `Widgets` and convert them into something that simple can understand and render. The active widgets are all stored in the `screen` list (in this case `rm.screen`) and you can easily access and modify any of the widgets in there at any time via the `lookup` function which will return the `Widget` object that has the corresponding ID 
 
 ```python
 print(rm.lookup("<id>"))
@@ -85,7 +100,7 @@ rm.remove("<id>")
 rm.remove(my_button)
 ```
 
-In case you want to fully clear the screen, you can use the `eclear()` function - however this does require the modified updated simple binary which `okeh` can provide for you! 
+In case you want to fully clear the screen, you can use the `eclear()` function - however this does require the modified updated simple binary which okeh can provide for you! 
 
 ```python
 rm.eclear()
@@ -111,7 +126,7 @@ clicked = rm.display()
 print(clicked) # {"<id>": True}
 ```
 
-If its a `button` that has been pressed it will return `True` as the value, if anything else has been given it will use that specific input (for example, from the keyboard) as the value.
+If it's a `button` that has been pressed it will return `True` as the value, if anything else has been given it will use that specific input (for example, from the keyboard) as the value.
 
 
 Hope this guide was helpful, feel free to ask if you need some help (`Jayy#6024` on discord)

@@ -19,7 +19,7 @@ After having installed all the perquisites you are ready to start developing, ma
 from carta import ReMarkable, Widget 
 rm = ReMarkable() 
 
-my_button = Widget(id="but1", type="button", value="Hello!", x="50%", y="50%")
+my_button = Widget(id="but1", typ="button", value="Hello!", x="50%", y="50%")
 
 rm.add(my_button)
 rm.display()

@@ -31,7 +31,7 @@ Here's an example script that you can copy:
 from carta import ReMarkable, Widget 
 rm = ReMarkable() 
 
-my_button = Widget(id="but1", type="button", value="Hello!", x="50%", y="50%")
+my_button = Widget(id="but1", typ="button", value="Hello!", x="50%", y="50%")
 
 rm.add(my_button)
 rm.display()
@@ -64,7 +64,7 @@ The following is a table outlining information about supported arguments which c
 | Argument | Required                      | Use                                                               | Supported inputs                                                                          | Notes                                                                                                               |
 | -------- | ----------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | id       | Yes                           | Used to uniquely identify a widget when being interacted with     | Any string that hasn't been used before                                                   | Spaces will be converted to `_`                                                                                     |
-| type     | Yes                           | Gives a widget specific properties so it knows what to be used as | Any from the following: `label`, `paragraph`, `burtton`, `textinput`, `textarea`, `image` | Range is a WIP                                                                                                      |
+| typ     | Yes                           | Gives a widget specific properties so it knows what to be used as | Any from the following: `label`, `paragraph`, `burtton`, `textinput`, `textarea`, `image` | Range is a WIP                                                                                                      |
 | value    | Yes                           | What will be displayed on the widget                              | Any string (Image path for the `image` widget type)                                       | Be careful about using new lines                                                                                    |
 | x        | Yes                           | Used to calculate the rendering position of the widget            | A percentage, keyword or an integer                                                       | Supported keywords are `same` (same value as previous item) and `step` (previous item's cord + previous items size) |
 | y        | Yes                           | Used to calculate the rendering position of the widget            | A percentage, keyword or an integer                                                       | Supported keywords are `same` (same value as previous item) and `step` (previous item's cord + previous items size) |

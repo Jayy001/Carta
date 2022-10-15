@@ -1,5 +1,5 @@
 # Carta
-Python library for making GUI applications on the ReMarkable tablet wrapped around the "simple" application
+Python library for making GUI applications on the ReMarkable tablet wrapped around the ["simple"](https://rmkit.dev/apps/sas) application
 
 # Using carta
 Cartas purpose is to function as a python wrapper around *sas* - the simple app script for making apps on the Remarkable without need to compiling code. It's written in python and is designed to be as user-friendly and easy to use as possible.

@@ -183,8 +183,14 @@ class ReMarkable:
             height = self.fontsize * 1.3125
 
         else:
-            width = (self.fontsize / 1.7) * len(widget.value)
-            height = self.fontsize * 1.3125
+            if "\n" in widget.value:
+                lines = widget.value.split("\n")
+                width = (self.fontsize / 1.7) * len(max(lines))
+                height = self.fontsize * 1.3125 * len(lines)
+                
+            else:
+                width = (self.fontsize / 1.7) * len(widget.value)
+                height = self.fontsize * 1.3125
 
         return width, height
 

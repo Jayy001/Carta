@@ -23,6 +23,9 @@ class Widget:
 
     low: Optional[int] = 1
     high: Optional[int] = 10
+    
+    rawfile: Optional[str] = "out.raw"
+    pngfile: Optional[str] = "out.png"
 
     @property
     def convert(self):
@@ -35,6 +38,9 @@ class Widget:
 
         if self.typ == "range":
             layout += f"{self.low} {self.high} "
+        
+        elif self.typ == "canvas":
+            layout += f"{self.rawfile} {self.pngfile}"
 
         layout += self.value
 
@@ -66,15 +72,20 @@ class Widget:
 
 
 class ReMarkable:
-    def __init__(self) -> None:
-        self.command = ["/opt/bin/simple"]
+    def __init__(self, simple=None) -> None:
+        if simple is None:
+            self.command = ["/opt/bin/simple"]
 
-        if "reMarkable 2.0" in str(
-                subprocess.check_output(["cat", "/sys/devices/soc0/machine"])
-        ):
-            self.command.insert(0, "rm2fb-client")
-
+            if "reMarkable 2.0" in str(
+                    subprocess.check_output(["cat", "/sys/devices/soc0/machine"])
+            ):
+                self.command.insert(0, "rm2fb-client")
+                
+        else:
+            self.command = [simple]
+        
         self.reset()  # Don't make this a function?
+         
 
     def display(self) -> bytes | dict:
         if not self.screen:
@@ -179,6 +190,5 @@ class ReMarkable:
 
 
 """
-Make the images appear
 Paragraph % length
 """

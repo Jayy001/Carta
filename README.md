@@ -4,11 +4,13 @@ Python library for making GUI applications on the reMarkable tablet wrapped arou
 # Simulating the ReMarkable device
 It can be a pain having to transfer the script & run the script from the RM each time. Especially if you want to use the device for something else at the time. To help with this, I've made the option to manually set the command to a `simple` x64 binary that can be run on linux which will write to `fb.pnm` - This is the framebuffer file that you'll need to read from. 
 
-In the `misc` folder I've provided the binary and an example script as an example. To use this, just call the ReMarkable class like so:
+In the `misc` folder I've provided the binary and a basic script as an example. To use this, just initialize the ReMarkable object like so:
 
 ```python
 rm = ReMarkable(simple="path/to/simple/binay") 
 ```
+
+Finally, checkout [remarkable-sim](https://github.com/Evidlo/remarkable_sim/) for events (like button clicking) support
 
 # Using Carta
 Carta's purpose is to function as a Python wrapper around [*sas*](https://rmkit.dev/apps/sas) - the simple app script for making apps on the reMarkable without need to compiling code.

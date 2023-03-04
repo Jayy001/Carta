@@ -72,18 +72,17 @@ class Widget:
 
 
 class ReMarkable:
-    def __init__(self, simple=None) -> None:
-        if simple is None:
-            self.command = ["/opt/bin/simple"]
-
-            if "reMarkable 2.0" in str(
+    def __init__(self, simple="/opt/bin/simple") -> None:
+        """
+        if "reMarkable 2.0" in str(
                     subprocess.check_output(["cat", "/sys/devices/soc0/machine"])
             ):
                 self.command.insert(0, "rm2fb-client")
-                
-        else:
-            self.command = [simple]
+        """
+        if not os.path.exists():
+            raise OSError("Simple binary not found")
         
+        self.command = [simple]
         self.reset()  # Don't make this a function?
          
 

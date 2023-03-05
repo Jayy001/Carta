@@ -24,7 +24,7 @@ class Widget:
 
     low: Optional[int] = 1
     high: Optional[int] = 10
-    
+
     rawfile: Optional[str] = "out.raw"
     pngfile: Optional[str] = "out.png"
 
@@ -34,7 +34,7 @@ class Widget:
 
         if self.justify:
             layout += f"@justify {self.justify}\n"
-        
+
         if self.fontsize:
             layout += f"@fontsize {self.fontsize}\n"
 
@@ -42,7 +42,7 @@ class Widget:
 
         if self.typ == "range":
             layout += f"{self.low} {self.high} "
-        
+
         elif self.typ == "canvas":
             layout += f"{self.rawfile} {self.pngfile}"
 
@@ -60,13 +60,15 @@ class Widget:
 
         if self.typ == "range":
             if not all({self.low, self.high}):
-                raise LookupError("You have specified a slider type but have not provided a high and low values")
+                raise LookupError(
+                    "You have specified a slider type but have not provided a high and low values"
+                )
 
-            '''
+            """
             int_check = int(self.value.__index__())
             if int_check < 1:
                 raise ValueError('Expected positive integer for value')
-            '''
+            """
 
         if type(self.value) is not str:
             self.value = str(self.value)
@@ -85,11 +87,10 @@ class ReMarkable:
         """
         if not os.path.exists(simple):
             raise OSError("Simple binary not found")
-        
+
         self.debug = debug
         self.command = [simple]
         self.reset()  # Don't make this a function?
-         
 
     def display(self) -> bytes | dict:
         if not self.screen:
@@ -119,13 +120,16 @@ class ReMarkable:
                 compiled_widget.y = starting_point - compiled_widget.height / 2
 
             layout.append(compiled_widget.convert)
-            
+
             if compiled_widget.fontsize:
                 layout.append(f"@fontsize {self.fontsize}")
             if compiled_widget.justify:
                 layout.append(f"@justify {self.justify}")
 
         script += "\n".join(layout)
+
+        if self.debug:
+            print(script)
 
         event = subprocess.Popen(
             self.command, stdin=subprocess.PIPE, stdout=subprocess.PIPE
@@ -142,9 +146,6 @@ class ReMarkable:
             else:
                 out[stdout[0]] = stdout[-1]  # Other
 
-        if self.debug:
-            print(script)
-            
         return out
 
     def lookup(self, id: object) -> object:
@@ -170,7 +171,7 @@ class ReMarkable:
     def reset(self) -> None:
         self.screen = []
         self.fontsize = 32
-        self.justify = 'center'
+        self.justify = "center"
         self.timeout = None
 
     def remove(self, id: int = None, widget: Widget = None) -> None:
@@ -200,7 +201,7 @@ class ReMarkable:
                 lines = widget.value.split("\n")
                 width = (self.fontsize / 1.7) * len(max(lines))
                 height = self.fontsize * 1.3125 * len(lines)
-                
+
             else:
                 width = (self.fontsize / 1.7) * len(widget.value)
                 height = self.fontsize * 1.3125

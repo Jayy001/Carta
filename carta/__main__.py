@@ -19,6 +19,7 @@ class Widget:
     width: int | str | None = None
     height: int | str | None = None
 
+    fontsize: Optional[str] = None
     justify: Optional[str] = None
 
     low: Optional[int] = 1
@@ -33,6 +34,9 @@ class Widget:
 
         if self.justify:
             layout += f"@justify {self.justify}\n"
+        
+        if self.fontsize:
+            layout += f"@fontsize {self.fontsize}\n"
 
         layout += f"{self.typ}:{self.id} {self.x} {self.y} {self.width} {self.height} "
 
@@ -72,16 +76,17 @@ class Widget:
 
 
 class ReMarkable:
-    def __init__(self, simple="/opt/bin/simple") -> None:
+    def __init__(self, simple="/opt/bin/simple", debug=False) -> None:
         """
         if "reMarkable 2.0" in str(
                     subprocess.check_output(["cat", "/sys/devices/soc0/machine"])
             ):
                 self.command.insert(0, "rm2fb-client")
         """
-        if not os.path.exists():
+        if not os.path.exists(simple):
             raise OSError("Simple binary not found")
         
+        self.debug = debug
         self.command = [simple]
         self.reset()  # Don't make this a function?
          
@@ -114,6 +119,9 @@ class ReMarkable:
                 compiled_widget.y = starting_point - compiled_widget.height / 2
 
             layout.append(compiled_widget.convert)
+            
+            if compiled_widget.fontsize:
+                layout.append(f"@fontsize {self.fontsize}")
 
         script += "\n".join(layout)
 
@@ -132,6 +140,9 @@ class ReMarkable:
             else:
                 out[stdout[0]] = stdout[-1]  # Other
 
+        if self.debug:
+            print(script)
+            
         return out
 
     def lookup(self, id: object) -> object:

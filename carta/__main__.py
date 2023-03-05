@@ -122,6 +122,8 @@ class ReMarkable:
             
             if compiled_widget.fontsize:
                 layout.append(f"@fontsize {self.fontsize}")
+            if compiled_widget.justify:
+                layout.append(f"@justify {self.justify}")
 
         script += "\n".join(layout)
 
@@ -168,6 +170,7 @@ class ReMarkable:
     def reset(self) -> None:
         self.screen = []
         self.fontsize = 32
+        self.justify = 'center'
         self.timeout = None
 
     def remove(self, id: int = None, widget: Widget = None) -> None:

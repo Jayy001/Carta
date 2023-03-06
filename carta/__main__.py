@@ -49,7 +49,7 @@ class Widget:
             layout = f"@justify {self.justify}\n{layout}"
 
         if self.fontsize:
-            layout += f"\n@fontsize {self.fontsize}\n{layout}"
+            layout = f"\n@fontsize {self.fontsize}\n{layout}"
 
         return layout
 

@@ -32,12 +32,6 @@ class Widget:
     def convert(self):
         layout = ""
 
-        if self.justify:
-            layout += f"@justify {self.justify}\n"
-
-        if self.fontsize:
-            layout += f"@fontsize {self.fontsize}\n"
-
         layout += f"{self.typ}:{self.id} {self.x} {self.y} {self.width} {self.height} "
 
         if self.typ == "range":
@@ -50,6 +44,12 @@ class Widget:
 
         if "\n" in self.value:
             layout = "[" + layout + "]"
+        
+        if self.justify:
+            layout = f"@justify {self.justify}\n{layout}"
+
+        if self.fontsize:
+            layout += f"\n@fontsize {self.fontsize}\n{layout}"
 
         return layout
 
@@ -124,6 +124,7 @@ class ReMarkable:
             if compiled_widget.fontsize:
                 layout.append(f"@fontsize {self.fontsize}")
             if compiled_widget.justify:
+                print(compiled_widget.justify, self.justify)
                 layout.append(f"@justify {self.justify}")
 
         script += "\n".join(layout)

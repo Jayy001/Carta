@@ -49,7 +49,9 @@ class Widget:
             layout = f"@justify {self.justify}\n{layout}"
 
         if self.fontsize:
-            layout = f"\n@fontsize {self.fontsize}\n{layout}"
+            layout = f"@fontsize {self.fontsize}\n{layout}"
+            
+        print(layout)
 
         return layout
 
@@ -96,13 +98,18 @@ class ReMarkable:
         if not self.screen:
             return {}
 
-        script = f"@fontsize {self.fontsize}\n"
-
         if self.timeout:
             script += f"@timeout {self.timeout}\n"
 
         layout = []
+        
         for widget in self.screen:
+            if compiled_widget.fontsize is None:
+                layout.append(f"@fontsize {self.fontsize}")
+                
+            if compiled_widget.justify is None:
+                layout.append(f"@justify {self.justify}")
+            
             compiled_widget = copy.copy(widget)
 
             if {widget.width, widget.height} == {None}:
@@ -120,12 +127,6 @@ class ReMarkable:
                 compiled_widget.y = starting_point - compiled_widget.height / 2
 
             layout.append(compiled_widget.convert)
-
-            if compiled_widget.fontsize:
-                layout.append(f"@fontsize {self.fontsize}")
-            if compiled_widget.justify:
-                print(compiled_widget.justify, self.justify)
-                layout.append(f"@justify {self.justify}")
 
         script += "\n".join(layout)
 

@@ -51,8 +51,6 @@ class Widget:
         if self.fontsize:
             layout = f"@fontsize {self.fontsize}\n{layout}"
 
-        print(layout)
-
         return layout
 
     def __post_init__(self):
@@ -80,18 +78,24 @@ class Widget:
 
 
 class ReMarkable:
-    def __init__(self, simple="/opt/bin/simple", debug=False) -> None:
+    def __init__(self, simple="/opt/bin/simple", rm2fb=False, debug=False) -> None:
         """
         if "reMarkable 2.0" in str(
                     subprocess.check_output(["cat", "/sys/devices/soc0/machine"])
             ):
                 self.command.insert(0, "rm2fb-client")
         """
+        
+        
         if not os.path.exists(simple):
             raise OSError("Simple binary not found")
 
         self.debug = debug
         self.command = [simple]
+        
+        if rm2fb:
+            self.command.insert(0, "rm2fb-client")
+        
         self.reset()  # Don't make this a function?
 
     def display(self) -> bytes | dict:
@@ -131,7 +135,7 @@ class ReMarkable:
 
             layout.append(compiled_widget.convert)
 
-        script += "\n".join(layout)
+        script += "\n".join(layout) #TODO: Fix duplication
 
         if self.debug:
             print(script)

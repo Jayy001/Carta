@@ -138,15 +138,15 @@ class ReMarkable:
         )
         stdout, stderr = event.communicate(script.encode())
 
-        out = {}
+        out = ()
 
         if stdout:
             stdout = stdout.decode("utf-8").strip().split(": ")[1:]
 
             if len(stdout) == 1:  # Button
-                out[stdout[0]] = True
+                out = (stdout[0], True)
             else:
-                out[stdout[0]] = stdout[-1]  # Other
+                out = (stdout[0], stdout[-1]) # Other
 
         return out
 

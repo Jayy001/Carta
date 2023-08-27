@@ -148,7 +148,7 @@ class ReMarkable:
         out = ()
 
         if stdout:
-            stdout = stdout.decode("utf-8").strip().split(": ")[1:]
+            stdout = list(map(str.strip, stdout.decode("utf-8").strip().split(":")))[1:]
 
             if len(stdout) == 1:  # Button
                 out = (stdout[0], True)

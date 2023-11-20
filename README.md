@@ -66,7 +66,7 @@ This imports the necessary "parts" for the library to function. The `ReMarkable`
 Please refer to [the `simple` spec](https://rmkit.dev/apps/sas/spec) for more detailed information. 
 
 ```python
-my_button = Widget(id="but1", type="button", value="Hello!", x="50%", y="50%")
+my_button = Widget(id="but1", typ="button", value="Hello!", x="50%", y="50%")
 ```
 
 Here we are making a new `Widget` which we have assigned to `my_button`.
@@ -140,4 +140,4 @@ print(clicked) # {"<id>": True}
 If it's a `button` that has been pressed it will return `True` as the value, if anything else has been given it will use that specific input (for example, from the keyboard) as the value.
 
 
-Hope this guide was helpful, feel free to ask if you need some help (`Jayy#6024` on discord)
+Hope this guide was helpful, feel free to ask if you need some help (`jake.sh` on discord)

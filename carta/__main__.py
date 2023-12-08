@@ -185,6 +185,9 @@ class ReMarkable:
                 out = (stdout[0], True)
             else:
                 out = (stdout[0], stdout[-1])  # Other
+        
+        if out is ():
+            raise SystemError("There was an error with the display command! (Check if image path exists & the simple binary is not corrupted)")
 
         return out
 

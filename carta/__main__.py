@@ -205,9 +205,13 @@ class ReMarkable:
             self.screen.append(widget)
 
     def eclear(self):
-        os.system(
-            self.command[:-1] + ["/opt/bin/eclear"]
-        )  # Replace /opt/bin/simple with /opt/bin/eclear in the command
+        try:
+            os.system(
+                ' '.join(self.command[:-1] + ["/opt/bin/eclear"])
+            ) 
+            return True
+        except Exception:
+            return False 
 
     def reset(self) -> None:
         self.screen = []

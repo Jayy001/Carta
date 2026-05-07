@@ -129,12 +129,12 @@ rm.timeout = 32
 rm.fontsize = 24
 ```
 
-When you run the `display` function, carta will wait on any input being given **OR** the timeout being reached. When it's done this, it will return a `dict` object with the input given.
+When you run the `display` function, carta will wait on any input being given **OR** the timeout being reached. When it's done this, it will return a `tuple` with the input given.
 
 ```python
 clicked = rm.display()
 
-print(clicked) # {"<id>": True}
+print(clicked) # ("<id>", True)
 ```
 
 If it's a `button` that has been pressed it will return `True` as the value, if anything else has been given it will use that specific input (for example, from the keyboard) as the value.

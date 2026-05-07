@@ -140,4 +140,4 @@ print(clicked) # ("<id>", True)
 If it's a `button` that has been pressed it will return `True` as the value, if anything else has been given it will use that specific input (for example, from the keyboard) as the value.
 
 
-Hope this guide was helpful, feel free to ask if you need some help (`jake.sh` on discord)
+Hope this guide was helpful, feel free to ask if you need some help (`jake.skii` on discord)
